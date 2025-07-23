@@ -27,33 +27,33 @@ image = 'snow.png'
 
 
 # Load shadow image from file first
+image = 'snow.png'
+
+# Load shadow image
 shadow_img = cv2.cvtColor(cv2.imread('Samples/ShadowImages/' + image), cv2.COLOR_BGR2RGB).astype('double') / 255.0 
-
-# Then resize
 shadow_img = cv2.resize(shadow_img, (shadow_img.shape[1] // 2, shadow_img.shape[0] // 2))
-
 plt.figure()
 plt.imshow(shadow_img)
 plt.pause(0.01)
 
-
-hard_mask = cv2.resize(hard_mask, (hard_mask.shape[1]//2, hard_mask.shape[0]//2))
+# Load hard mask
+hard_mask = cv2.cvtColor(cv2.imread('Samples/HardMasks/' + image), cv2.COLOR_BGR2RGB).astype('double') / 255.0 
+hard_mask = cv2.resize(hard_mask, (hard_mask.shape[1] // 2, hard_mask.shape[0] // 2))
 plt.imshow(hard_mask)
 plt.pause(0.01)
 
-scribbles = cv2.resize(scribbles, (scribbles.shape[1]//2, scribbles.shape[0]//2))
+# Load scribbles
+scribbles = cv2.imread('Samples/Scribbles/' + image, cv2.IMREAD_COLOR) / 255.0
+scribbles = cv2.resize(scribbles, (scribbles.shape[1] // 2, scribbles.shape[0] // 2))
+
+# Apply closed-form matting
 soft_mask = closed_form_matting.closed_form_matting_with_scribbles(shadow_img, scribbles)
 
-
-#cv2.imwrite('Samples/SoftMasks/' + image, soft_mask * 255.0)
-
-
-#soft_mask = cv2.cvtColor(cv2.imread('Samples/SoftMasks/'+ image), cv2.COLOR_BGR2RGB).astype('float32') / 255.0 
-
+# Skip disk writing and directly invert
 soft_mask = 1 - soft_mask
-
 plt.imshow(soft_mask)
 plt.pause(0.01)
+
 
 #shadow removal functions
 def computeAverage(arr):
