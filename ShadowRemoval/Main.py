@@ -42,7 +42,7 @@ soft_mask = closed_form_matting.closed_form_matting_with_scribbles(shadow_img, s
 #cv2.imwrite('Samples/SoftMasks/' + image, soft_mask * 255.0)
 
 
-#soft_mask = cv2.cvtColor(cv2.imread('Samples/SoftMasks/'+ image), cv2.COLOR_BGR2RGB).astype('double') / 255.0 
+#soft_mask = cv2.cvtColor(cv2.imread('Samples/SoftMasks/'+ image), cv2.COLOR_BGR2RGB).astype('float32') / 255.0 
 
 soft_mask = 1 - soft_mask
 
@@ -266,14 +266,14 @@ plt.figure()
 resized = cv2.resize(shadow_img, (shadow_img.shape[1] // 4, shadow_img.shape[0] // 4))
 plt.imshow(resized)
 
-plt.show()
+plt.pause(0.01)
 
 plt.figure()
 resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
 plt.imshow(resized)
 
 plt.savefig('Results/' + image, dpi = 300)
-plt.show()
+plt.pause(0.01)
 
 
 print('Final RGB Ratios:', r)
