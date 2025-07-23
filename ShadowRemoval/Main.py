@@ -34,13 +34,13 @@ shadow_img = cv2.cvtColor(cv2.imread('Samples/ShadowImages/' + image), cv2.COLOR
 shadow_img = cv2.resize(shadow_img, (shadow_img.shape[1] // 2, shadow_img.shape[0] // 2))
 plt.figure()
 plt.imshow(shadow_img)
-plt.pause(0.01)
+plt.pause(3)
 
 # Load hard mask
 hard_mask = cv2.cvtColor(cv2.imread('Samples/HardMasks/' + image), cv2.COLOR_BGR2RGB).astype('double') / 255.0 
 hard_mask = cv2.resize(hard_mask, (hard_mask.shape[1] // 2, hard_mask.shape[0] // 2))
 plt.imshow(hard_mask)
-plt.pause(0.01)
+plt.pause(3)
 
 # Load scribbles
 scribbles = cv2.imread('Samples/Scribbles/' + image, cv2.IMREAD_COLOR) / 255.0
@@ -52,7 +52,7 @@ soft_mask = closed_form_matting.closed_form_matting_with_scribbles(shadow_img, s
 # Skip disk writing and directly invert
 soft_mask = 1 - soft_mask
 plt.imshow(soft_mask)
-plt.pause(0.01)
+plt.pause(3)
 
 
 #shadow removal functions
@@ -144,7 +144,7 @@ def updateBins(bins, binIndx, r):
 
 def getFinalRatio(bins, binIndx):
     
-    r = np.zeros(3).astype('float32')
+    r = np.zeros(3).astype('float64')
 
     indx = np.where(bins == np.max(bins, axis=0))
     
@@ -176,8 +176,8 @@ def removeShadowImage(shadow_img, hard_mask, softMaskPatch, ratio):
     
     mapped_image = np.multiply(shadow_img, shadow_mapper)
 
-    max_vals = np.zeros(3, dtype= 'float32')
-    max_valsBG = np.zeros(3, dtype= 'float32')
+    max_vals = np.zeros(3, dtype= 'float64')
+    max_valsBG = np.zeros(3, dtype= 'float64')
 
 
     fg = (hard_mask*mapped_image)
@@ -272,14 +272,14 @@ plt.figure()
 resized = cv2.resize(shadow_img, (shadow_img.shape[1] // 4, shadow_img.shape[0] // 4))
 plt.imshow(resized)
 
-plt.pause(0.01)
+plt.pause(3)
 
 plt.figure()
 resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
 plt.imshow(resized)
 
 plt.savefig('Results/' + image, dpi = 300)
-plt.pause(0.01)
+plt.pause(3)
 
 
 print('Final RGB Ratios:', r)
