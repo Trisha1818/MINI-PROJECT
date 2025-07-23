@@ -1,0 +1,143 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+.header {
+    background-color: #007BFF;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Form Styling */
+.form-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 20px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-container input[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.form-container input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* User Home Page */
+.user-home {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.user-home .button {
+    background-color: #28a745;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.2em;
+    width: 48%;
+    text-decoration: none;
+}
+
+.user-home .button:hover {
+    background-color: #218838;
+}
+
+/* Image Upload Section */
+.upload-section {
+    margin-top: 40px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section input[type="file"] {
+    margin-bottom: 20px;
+}
+
+.upload-section button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    border-radius: 5px;
+}
+
+.upload-section button:hover {
+    background-color: #0056b3;
+}
+
+/* Image Display */
+.result-image {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.result-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+/* History Page */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.history-table th, .history-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.history-table th {
+    background-color: #007BFF;
+    color: white;
+}
+
+.history-table td {
+    background-color: #f9f9f9;
+}
+
+.history-table tr:hover {
+    background-color: #f1f1f1;
+}
