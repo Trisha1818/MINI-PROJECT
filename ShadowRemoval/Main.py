@@ -144,7 +144,7 @@ def updateBins(bins, binIndx, r):
 
 def getFinalRatio(bins, binIndx):
     
-    r = np.zeros(3).astype('float64')
+    r = np.zeros(3).astype('float32')
 
     indx = np.where(bins == np.max(bins, axis=0))
     
@@ -176,8 +176,8 @@ def removeShadowImage(shadow_img, hard_mask, softMaskPatch, ratio):
     
     mapped_image = np.multiply(shadow_img, shadow_mapper)
 
-    max_vals = np.zeros(3, dtype= 'float64')
-    max_valsBG = np.zeros(3, dtype= 'float64')
+    max_vals = np.zeros(3, dtype= 'float32')
+    max_valsBG = np.zeros(3, dtype= 'float32')
 
 
     fg = (hard_mask*mapped_image)
