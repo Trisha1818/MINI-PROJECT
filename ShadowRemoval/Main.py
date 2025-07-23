@@ -105,30 +105,29 @@ def getMaskRatio(m):
 
 
 
-    def getPatch(soft_mask, hard_mask, shadow_img, x, y, patch_size, width, height):
-        xE = x + patch_size
-        yE = y + patch_size
+ def getPatch(soft_mask, hard_mask, shadow_img, x, y, patch_size, width, height):
+    xE = x + patch_size
+    yE = y + patch_size
 
-        if xE >= height:
-            xE = height
-        if yE >= width:
-            yE = width
+    if xE >= height:
+        xE = height
+    if yE >= width:
+        yE = width
 
-        # Corrected: extract 2D soft_mask patch and convert it to 3D
-        soft_m = soft_mask[x:xE, y:yE].copy()  # Only 2D slice here
-        soft_m = np.repeat(soft_m[:, :, np.newaxis], 3, axis=2)  # Now shape (H, W, 3)
+    # ✅ Fix soft_mask indexing
+    soft_m = soft_mask[x:xE, y:yE].copy()  # 2D patch
+    soft_m = np.repeat(soft_m[:, :, np.newaxis], 3, axis=2)  # make it 3D
 
-        m = hard_mask[x:xE, y:yE, :].copy()
-        s = shadow_img[x:xE, y:yE, :].copy()
+    m = hard_mask[x:xE, y:yE, :].copy()
+    s = shadow_img[x:xE, y:yE, :].copy()
 
-        maskRatio = getMaskRatio(m)
+    maskRatio = getMaskRatio(m)
 
-        if 0.49 < maskRatio < 0.51:
-            return s, m, soft_m, True
-        else:
-           return None, None, None, False
+    if 0.49 < maskRatio < 0.51:
+        return s, m, soft_m, True
+    else:
+        return None, None, None, False
 
-    
     
 def updateBins(bins, binIndx, r):
     
