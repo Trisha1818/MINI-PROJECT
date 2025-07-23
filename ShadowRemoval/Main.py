@@ -115,7 +115,8 @@ def getPatch(soft_mask, hard_mask, shadow_img, x, y, patch_size, width, height):
         yE = width
 
     soft_m = soft_mask[x:xE, y:yE].copy()  # ✅ 2D patch
-    soft_m = np.repeat(soft_m[:, :, np.newaxis], 3, axis=2)  # ✅ to (H, W, 3)
+    soft_m = np.repeat(soft_m[:, :, np.newaxis], 3, axis=2)  # ✅ Convert to 3D shape (H, W, 3)
+
 
     m = hard_mask[x:xE, y:yE, :].copy()
     s = shadow_img[x:xE, y:yE, :].copy()
