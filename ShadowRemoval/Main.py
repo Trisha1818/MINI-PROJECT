@@ -105,7 +105,7 @@ def getMaskRatio(m):
 
 
 
- def getPatch(soft_mask, hard_mask, shadow_img, x, y, patch_size, width, height):
+def getPatch(soft_mask, hard_mask, shadow_img, x, y, patch_size, width, height):
     xE = x + patch_size
     yE = y + patch_size
 
@@ -114,9 +114,8 @@ def getMaskRatio(m):
     if yE >= width:
         yE = width
 
-    # ✅ Fix soft_mask indexing
-    soft_m = soft_mask[x:xE, y:yE].copy()  # 2D patch
-    soft_m = np.repeat(soft_m[:, :, np.newaxis], 3, axis=2)  # make it 3D
+    soft_m = soft_mask[x:xE, y:yE].copy()  # ✅ 2D patch
+    soft_m = np.repeat(soft_m[:, :, np.newaxis], 3, axis=2)  # ✅ to (H, W, 3)
 
     m = hard_mask[x:xE, y:yE, :].copy()
     s = shadow_img[x:xE, y:yE, :].copy()
@@ -127,6 +126,7 @@ def getMaskRatio(m):
         return s, m, soft_m, True
     else:
         return None, None, None, False
+
 
     
 def updateBins(bins, binIndx, r):
