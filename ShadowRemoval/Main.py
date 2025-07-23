@@ -263,11 +263,15 @@ def shadowRemover(shadow_img, soft_mask, hard_mask, patch_size = 12, offset = 1)
 shadow_free_image, bins, r = shadowRemover(shadow_img, soft_mask, hard_mask, patch_size=50, offset=10)
 
 plt.figure()
-plt.imshow(shadow_img)
+resized = cv2.resize(shadow_img, (shadow_img.shape[1] // 4, shadow_img.shape[0] // 4))
+plt.imshow(resized)
+
 plt.show()
 
 plt.figure()
-plt.imshow(shadow_free_image)
+resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
+plt.imshow(resized)
+
 plt.savefig('Results/' + image, dpi = 300)
 plt.show()
 
