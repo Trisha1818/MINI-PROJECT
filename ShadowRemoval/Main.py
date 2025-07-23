@@ -25,7 +25,7 @@ image = 'snow.png'
 # image = 'footpath.png'
 
 
-hadow_img = cv2.resize(shadow_img, (shadow_img.shape[1]//2, shadow_img.shape[0]//2))
+shadow_img = cv2.resize(shadow_img, (shadow_img.shape[1]//2, shadow_img.shape[0]//2))
 plt.figure()
 plt.imshow(shadow_img)
 plt.show()
