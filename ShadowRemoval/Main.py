@@ -116,8 +116,8 @@ def getPatch(soft_mask, hard_mask, shadow_img, x, y, patch_size, width, height):
     if(yE >= width):
         yE = yE - (yE - width + 1)
         
-    soft_m = soft_mask[x:xE, y:yE,:].copy()
-    
+    soft_m = soft_mask[x:xE, y:yE].copy()
+    soft_m = np.repeat(soft_m[:, :, np.newaxis], 3, axis=2)
     m = hard_mask[x:xE, y:yE,:].copy()
     
     s = shadow_img[x:xE, y:yE,:].copy() 
