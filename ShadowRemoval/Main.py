@@ -1,37 +1,21 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-
 import os
-
 import closed_form_matting
 
+image = 'snow.png'  # Only assign once
 
-# image = 'road_shadow.png'
-# image = 'crossing.png'
+image_path = 'Samples/ShadowImages/' + image
+print("Trying to load:", os.path.abspath(image_path))
 
-# image = 'road2.png'
+img_raw = cv2.imread(image_path)
+if img_raw is None:
+    raise FileNotFoundError(f"Image not found: {image_path}")
 
-image = 'grass.png'
-image = 'nail.png'
-image = 'lawn.png'
-
-image = 'z10.png'
-image = 'snow.png'
-
-# image = 'tennis.png'
-
-# image = 'snow.png'
-# image = 'footpath.png'
-
-
-
-# Load shadow image from file first
-image = 'snow.png'
-
-# Load shadow image
-shadow_img = cv2.cvtColor(cv2.imread('Samples/ShadowImages/' + image), cv2.COLOR_BGR2RGB).astype('float32') / 255.0 
+shadow_img = cv2.cvtColor(img_raw, cv2.COLOR_BGR2RGB).astype('float32') / 255.0
 shadow_img = cv2.resize(shadow_img, (shadow_img.shape[1] // 2, shadow_img.shape[0] // 2))
+
 plt.figure()
 plt.imshow(shadow_img)
 plt.pause(3)
