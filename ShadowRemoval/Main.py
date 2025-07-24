@@ -67,10 +67,16 @@ plt.pause(3)
 def computeAverage(arr):
     arr_copy = arr.copy()
     arr_copy[arr_copy == 0] = np.nan
+
+    # If entire array is nan, return default value (e.g. 1.0 to avoid zero division)
+    if np.isnan(arr_copy).all():
+        return 1.0
+
     arr_mean = np.nanmean(arr_copy, axis=1)
     arr_mean = np.nanmean(arr_mean, axis=0)
 
     return arr_mean
+
 
 
 def getIntensityRatio(imgPatch, maskPatch, softMaskPatch):
