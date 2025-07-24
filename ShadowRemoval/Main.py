@@ -65,11 +65,13 @@ plt.pause(3)
 
 #shadow removal functions
 def computeAverage(arr):
-    arr[arr == 0] = np.nan
-    arr_mean = np.nanmean(arr, axis=1)
+    arr_copy = arr.copy()
+    arr_copy[arr_copy == 0] = np.nan
+    arr_mean = np.nanmean(arr_copy, axis=1)
     arr_mean = np.nanmean(arr_mean, axis=0)
 
     return arr_mean
+
 
 def getIntensityRatio(imgPatch, maskPatch, softMaskPatch):
     s = imgPatch
@@ -153,30 +155,21 @@ def updateBins(bins, binIndx, r):
 
 
 def getFinalRatio(bins, binIndx):
-    
     r = np.zeros(3).astype('float64')
 
-    indx = np.where(bins == np.max(bins, axis=0))
-    
-    prevY = 0
-    prevYCount = 0
-    
-    for x, y in zip(indx[0], indx[1]):
-        
-        r[y] = r[y] + binIndx[x].astype('float64')
-        
-        r = np.nan_to_num(r)
-        
-        if(y != prevY):
-            r[prevY]  = r[prevY]/prevYCount
-            prevYCount = 0
-            
-        prevY  = y
-        prevYCount = prevYCount + 1
-    
-    r[prevY]  = r[prevY]/prevYCount
-    
+    for i in range(3):  # For each RGB channel
+        channel_bins = bins[:, i]
+        max_count = np.max(channel_bins)
+        max_indices = np.where(channel_bins == max_count)[0]
+
+        if len(max_indices) > 0:
+            # Average the bin indices corresponding to the max counts
+            r[i] = np.mean(binIndx[max_indices])
+        else:
+            r[i] = 1.0  # Fallback ratio
+
     return r
+
         
     
 def removeShadowImage(shadow_img, hard_mask, softMaskPatch, ratio):
