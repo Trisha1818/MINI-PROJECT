@@ -28,7 +28,7 @@ image = 'snow.png'
 
 # Load shadow image from file first
 image = 'snow.png'
-
+image = 'shadow_img'
 # Load shadow image
 shadow_img = cv2.cvtColor(cv2.imread('Samples/ShadowImages/' + image), cv2.COLOR_BGR2RGB).astype('double') / 255.0 
 shadow_img = cv2.resize(shadow_img, (shadow_img.shape[1] // 2, shadow_img.shape[0] // 2))
