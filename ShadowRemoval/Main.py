@@ -1,26 +1,41 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+
 import os
+
 import closed_form_matting
 
-image = 'snow.png'  # Only assign once
 
-image_path = 'Samples/ShadowImages/' + image
-print("Trying to load:", os.path.abspath(image_path))
+# image = 'road_shadow.png'
+# image = 'crossing.png'
 
-img_raw = cv2.imread(image_path)
-if img_raw is None:
-    raise FileNotFoundError(f"Image not found: {image_path}")
+# image = 'road2.png'
 
-shadow_img = cv2.cvtColor(img_raw, cv2.COLOR_BGR2RGB).astype('float32') / 255.0
+image = 'grass.png'
+image = 'nail.png'
+image = 'lawn.png'
+
+image = 'z10.png'
+image = 'snow.png'
+
+# image = 'tennis.png'
+
+# image = 'snow.png'
+# image = 'footpath.png'
+
+
+
+# Load shadow image from file first
+image = 'snow.png'
+
+# Load shadow image
+shadow_img = cv2.cvtColor(cv2.imread('Samples/ShadowImages/' + image), cv2.COLOR_BGR2RGB).astype('float32') / 255.0 
 shadow_img = cv2.resize(shadow_img, (shadow_img.shape[1] // 2, shadow_img.shape[0] // 2))
-
 plt.figure()
 plt.imshow(shadow_img)
 plt.pause(3)
 
-# Load hard mask
 # Load hard mask
 # Load hard mask
 hard_mask_path = 'Samples/HardMasks/' + image
@@ -29,10 +44,8 @@ hard_mask_raw = cv2.imread(hard_mask_path)
 if hard_mask_raw is None:
     raise FileNotFoundError(f"Could not load hard mask image: {hard_mask_path}")
 
-# First resize, then convert
-hard_mask_raw = cv2.resize(hard_mask_raw, (hard_mask_raw.shape[1] // 2, hard_mask_raw.shape[0] // 2))
 hard_mask = cv2.cvtColor(hard_mask_raw, cv2.COLOR_BGR2RGB).astype('float32') / 255.0
-
+hard_mask = cv2.resize(hard_mask, (hard_mask.shape[1] // 2, hard_mask.shape[0] // 2))
 
 plt.imshow(hard_mask)
 plt.pause(3)
@@ -54,16 +67,10 @@ plt.pause(3)
 def computeAverage(arr):
     arr_copy = arr.copy()
     arr_copy[arr_copy == 0] = np.nan
-
-    # If entire array is nan, return default value (e.g. 1.0 to avoid zero division)
-    if np.isnan(arr_copy).all():
-        return 1.0
-
     arr_mean = np.nanmean(arr_copy, axis=1)
     arr_mean = np.nanmean(arr_mean, axis=0)
 
     return arr_mean
-
 
 
 def getIntensityRatio(imgPatch, maskPatch, softMaskPatch):
@@ -263,35 +270,39 @@ def shadowRemover(shadow_img, soft_mask, hard_mask, patch_size = 12, offset = 1)
 
 
 
-# Final shadow removal
 shadow_free_image, bins, r = shadowRemover(shadow_img, soft_mask, hard_mask, patch_size=12, offset=5)
 
-# Clip result to [0.0, 1.0]
-shadow_free_image = np.clip(shadow_free_image, 0.0, 1.0)
-
-# Resize image for visualization
+plt.figure()
 resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
 
-# Show shadow-free image only once
-plt.figure()
-plt.title("Final Shadow-Free Output")
+# Clip to valid float range [0.0, 1.0]
+resized = np.clip(resized, 0.0, 1.0)
+
 plt.imshow(resized)
-plt.axis('off')
+
+
 plt.pause(3)
 
-# Save the result
-output_path = 'Results/' + image
-cv2.imwrite(output_path, (shadow_free_image * 255).astype(np.uint8))
-print(f"Saved shadow-free image to: {output_path}")
+plt.figure()
+resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
 
-# Plot RGB ratio bin graph
+# Clip to valid float range [0.0, 1.0]
+resized = np.clip(resized, 0.0, 1.0)
+
+plt.imshow(resized)
+
+
+plt.savefig('Results/' + image, dpi = 300)
+shadow_free_image = np.clip(shadow_free_image, 0.0, 1.0)
+
+plt.pause(3)
+
+
+print('Final RGB Ratios:', r)
+
 plt.figure()
 plt.title('RGB Ratio Space')
 plt.xlabel("Bins")
 plt.ylabel("# of patches")
 plt.plot(bins)
-plt.xlim([0, 100])
-plt.show()
-
-print('Final RGB Ratios:', r)
-
+plt.xlim([0, 100])  
