@@ -276,39 +276,35 @@ def shadowRemover(shadow_img, soft_mask, hard_mask, patch_size = 12, offset = 1)
 
 
 
+# Final shadow removal
 shadow_free_image, bins, r = shadowRemover(shadow_img, soft_mask, hard_mask, patch_size=12, offset=5)
 
-plt.figure()
-resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
-
-# Clip to valid float range [0.0, 1.0]
-resized = np.clip(resized, 0.0, 1.0)
-
-plt.imshow(resized)
-
-
-plt.pause(3)
-
-plt.figure()
-resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
-
-# Clip to valid float range [0.0, 1.0]
-resized = np.clip(resized, 0.0, 1.0)
-
-plt.imshow(resized)
-
-
-plt.savefig('Results/' + image, dpi = 300)
+# Clip result to [0.0, 1.0]
 shadow_free_image = np.clip(shadow_free_image, 0.0, 1.0)
 
+# Resize image for visualization
+resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
+
+# Show shadow-free image only once
+plt.figure()
+plt.title("Final Shadow-Free Output")
+plt.imshow(resized)
+plt.axis('off')
 plt.pause(3)
 
+# Save the result
+output_path = 'Results/' + image
+cv2.imwrite(output_path, (shadow_free_image * 255).astype(np.uint8))
+print(f"Saved shadow-free image to: {output_path}")
 
-print('Final RGB Ratios:', r)
-
+# Plot RGB ratio bin graph
 plt.figure()
 plt.title('RGB Ratio Space')
 plt.xlabel("Bins")
 plt.ylabel("# of patches")
 plt.plot(bins)
-plt.xlim([0, 100]) 
+plt.xlim([0, 100])
+plt.show()
+
+print('Final RGB Ratios:', r)
+
