@@ -72,28 +72,28 @@ def computeAverage(arr):
     return arr_mean
 
 def getIntensityRatio(imgPatch, maskPatch, softMaskPatch):
-    
     s = imgPatch
     m = maskPatch
-    
-    shd = s*m
-    non_shd = s*np.logical_not(m)
+
+    shd = s * m
+    non_shd = s * np.logical_not(m)
 
     shd_mean = computeAverage(shd)
     non_shd_mean = computeAverage(non_shd)
-    
-    
-    shd_K = softMaskPatch*m
-    non_shd_K = softMaskPatch*np.logical_not(m)
+
+    shd_K = softMaskPatch * m
+    non_shd_K = softMaskPatch * np.logical_not(m)
 
     shd_mean_K = computeAverage(shd_K)
     non_shd_mean_K = computeAverage(non_shd_K)
-    
-    
 
-    r = (non_shd_mean - shd_mean) / ((shd_mean*non_shd_mean_K) - (non_shd_mean*shd_mean_K))
-    
-    
+    denominator = (shd_mean * non_shd_mean_K) - (non_shd_mean * shd_mean_K)
+
+    # Avoid divide-by-zero or tiny values
+    denominator = np.where(np.abs(denominator) < 1e-5, 1e-5, denominator)
+
+    r = (non_shd_mean - shd_mean) / denominator
+
     return r
 
 
