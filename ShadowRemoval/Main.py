@@ -210,20 +210,21 @@ def removeShadowImage(shadow_img, hard_mask, softMaskPatch, ratio):
 
 
 def fixPatchShadow(imgPatch, maskPatch, softMaskPatch, ratio):
-    
-    mapper = (ratio + 1)/(ratio*softMaskPatch + 1)
-    
-    fixed = imgPatch*mapper
-    
-    fg = fixed*maskPatch
+    # Expand softMaskPatch to 3 channels
+    if len(softMaskPatch.shape) == 2:
+        softMaskPatch = np.repeat(softMaskPatch[:, :, np.newaxis], 3, axis=2)
 
-    
-    bg = fixed*np.logical_not(maskPatch)
+    # Now compute mapper safely
+    mapper = (ratio + 1) / (ratio * softMaskPatch + 1e-5)
 
-    
-    final = (fg)+bg
-    
-    return fixed
+    fixed = imgPatch * mapper
+
+    fg = fixed * maskPatch
+    bg = fixed * (1 - maskPatch)
+
+    final = fg + bg
+    return final
+
 
 
 def rescale_images_linear(le):
