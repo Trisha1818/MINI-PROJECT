@@ -92,8 +92,7 @@ def getIntensityRatio(imgPatch, maskPatch, softMaskPatch):
     denominator = (shd_mean * non_shd_mean_K) - (non_shd_mean * shd_mean_K)
 
     # Avoid divide-by-zero or tiny values
-    denominator = np.where(np.abs(denominator) < 1e-8, 1e-8, denominator)
-
+    denominator = np.where(np.abs(denominator) < 1e-5, 1e-5, denominator)
 
     r = (non_shd_mean - shd_mean) / denominator
 
@@ -137,7 +136,7 @@ def getPatch(soft_mask, hard_mask, shadow_img, x, y, patch_size, width, height):
 
     maskRatio = getMaskRatio(m)
 
-    if 0.2 < maskRatio < 0.8:
+    if 0.49 < maskRatio < 0.51:
         return s, m, soft_m, True
     else:
         return None, None, None, False
@@ -197,8 +196,7 @@ def removeShadowImage(shadow_img, hard_mask, softMaskPatch, ratio):
     max_valsBG[1]  = np.amax(bg[:,:,1])
     max_valsBG[2]  = np.amax(bg[:,:,2])
 
-    shadow_free_image = np.clip(fg + bg, 0.0, 1.0)
-
+    shadow_free_image = (fg/max_vals) + (shadow_img*np.logical_not(hard_mask))
     
     return shadow_free_image
 
@@ -210,9 +208,7 @@ def fixPatchShadow(imgPatch, maskPatch, softMaskPatch, ratio):
         softMaskPatch = np.repeat(softMaskPatch[:, :, np.newaxis], 3, axis=2)
 
     # Now compute mapper safely
-    softMaskPatch = np.clip(softMaskPatch, 1e-4, 1.0)
-    mapper = 1 + softMaskPatch * (ratio - 1)
-
+    mapper = (ratio + 1) / (ratio * softMaskPatch + 1e-5)
 
     fixed = imgPatch * mapper
 
@@ -309,4 +305,4 @@ plt.title('RGB Ratio Space')
 plt.xlabel("Bins")
 plt.ylabel("# of patches")
 plt.plot(bins)
-plt.xlim([0, 100])  
+plt.xlim([0, 100]) 
