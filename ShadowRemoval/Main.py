@@ -37,8 +37,16 @@ plt.imshow(shadow_img)
 plt.pause(3)
 
 # Load hard mask
-hard_mask = cv2.cvtColor(cv2.imread('Samples/HardMasks/' + image), cv2.COLOR_BGR2RGB).astype('double') / 255.0 
+# Load hard mask
+hard_mask_path = 'Samples/HardMasks/' + image
+hard_mask_raw = cv2.imread(hard_mask_path)
+
+if hard_mask_raw is None:
+    raise FileNotFoundError(f"Could not load hard mask image: {hard_mask_path}")
+
+hard_mask = cv2.cvtColor(hard_mask_raw, cv2.COLOR_BGR2RGB).astype('double') / 255.0
 hard_mask = cv2.resize(hard_mask, (hard_mask.shape[1] // 2, hard_mask.shape[0] // 2))
+
 plt.imshow(hard_mask)
 plt.pause(3)
 
