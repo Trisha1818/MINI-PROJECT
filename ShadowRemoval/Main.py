@@ -30,7 +30,7 @@ image = 'snow.png'
 image = 'snow.png'
 
 # Load shadow image
-shadow_img = cv2.cvtColor(cv2.imread('Samples/ShadowImages/' + image), cv2.COLOR_BGR2RGB).astype('double') / 255.0 
+shadow_img = cv2.cvtColor(cv2.imread('Samples/ShadowImages/' + image), cv2.COLOR_BGR2RGB).astype('float32') / 255.0 
 shadow_img = cv2.resize(shadow_img, (shadow_img.shape[1] // 2, shadow_img.shape[0] // 2))
 plt.figure()
 plt.imshow(shadow_img)
@@ -270,7 +270,7 @@ def shadowRemover(shadow_img, soft_mask, hard_mask, patch_size = 12, offset = 1)
 
 
 
-shadow_free_image, bins, r = shadowRemover(shadow_img, soft_mask, hard_mask, patch_size=50, offset=10)
+shadow_free_image, bins, r = shadowRemover(shadow_img, soft_mask, hard_mask, patch_size=12, offset=5)
 
 plt.figure()
 resized = cv2.resize(shadow_free_image, (shadow_free_image.shape[1] // 4, shadow_free_image.shape[0] // 4))
