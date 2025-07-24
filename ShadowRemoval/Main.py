@@ -30,13 +30,11 @@ image = 'snow.png'
 image = 'snow.png'
 
 # Load shadow image
-# Load shadow image
 shadow_img = cv2.cvtColor(cv2.imread('Samples/ShadowImages/' + image), cv2.COLOR_BGR2RGB).astype('float32') / 255.0 
 shadow_img = cv2.resize(shadow_img, (shadow_img.shape[1] // 2, shadow_img.shape[0] // 2))
 plt.figure()
 plt.imshow(shadow_img)
 plt.pause(3)
-
 
 # Load hard mask
 # Load hard mask
@@ -313,4 +311,4 @@ plt.title('RGB Ratio Space')
 plt.xlabel("Bins")
 plt.ylabel("# of patches")
 plt.plot(bins)
-plt.xlim([0, 100])  
+plt.xlim([0, 100])       
